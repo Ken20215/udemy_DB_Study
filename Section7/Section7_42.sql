@@ -54,3 +54,62 @@ SELECT
  END AS score
 FROM tests_score;
 
+
+-- ORDER BYとCASEを組み合わせ
+# CASEで分類し昇順・降順に並び替える
+SELECT 
+ *,
+ CASE 
+	WHEN name IN("香川県","愛媛県","徳島県","高知県") THEN "四国"
+	WHEN name IN("兵庫県","大阪府","滋賀県","京都府","奈良県","三重県","和歌山県") THEN "近畿"
+	ELSE "その他" END AS "地域名"
+	FROM prefectures
+ORDER BY
+ CASE 
+	WHEN name IN("香川県","愛媛県","徳島県","高知県") THEN "四国"
+	WHEN name IN("兵庫県","大阪府","滋賀県","京都府","奈良県","三重県","和歌山県") THEN "近畿"
+	ELSE "その他"
+END DESC;
+
+# 四国を一番最初に持ってくる
+SELECT 
+ *,
+ CASE 
+	WHEN name IN("香川県","愛媛県","徳島県","高知県") THEN "四国"
+	WHEN name IN("兵庫県","大阪府","滋賀県","京都府","奈良県","三重県","和歌山県") THEN "近畿"
+	ELSE "その他" END AS "地域名"
+	FROM prefectures
+ORDER BY
+ CASE 
+	WHEN name IN("香川県","愛媛県","徳島県","高知県") THEN 0
+	WHEN name IN("兵庫県","大阪府","滋賀県","京都府","奈良県","三重県","和歌山県") THEN 1
+	ELSE 2
+END;
+
+
+-- UPDATE + CASE
+SELECT * FROM users;
+
+ALTER TABLE users ADD birth_era VARCHAR(2) AFTER birth_day;
+
+SELECT *,
+CASE
+	WHEN birth_day < "1989-01-07" THEN "昭和"
+	WHEN birth_day < "2019-05-01" THEN "平成"
+	WHEN birth_day >= "2019-05-01" THEN "令和"
+	ELSE "不明"
+	END AS "元号"
+FROM users;
+
+
+UPDATE users
+SET birth_era = CASE
+	WHEN birth_day < "1989-01-07" THEN "昭和"
+	WHEN birth_day < "2019-05-01" THEN "平成"
+	WHEN birth_day >= "2019-05-01" THEN "令和"
+	ELSE "不明"
+	END;
+
+SELECT * FROM users;
+
+
