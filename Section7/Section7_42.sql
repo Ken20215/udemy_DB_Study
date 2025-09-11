@@ -113,3 +113,13 @@ SET birth_era = CASE
 SELECT * FROM users;
 
 
+-- NULLを使う場合
+SELECT *,
+CASE
+	WHEN name IS NULL THEN "不明"
+	ELSE ""
+END AS "NULL CHECK"
+FROM customers WHERE name IS NULL;
+
+
+
